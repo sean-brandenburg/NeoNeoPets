@@ -1,3 +1,7 @@
+<script>
+    console.log("JS GOES HERE")
+</script>
+
 <div class= "flex flex-col items-center pt-4 h-screen">
     <div class="stats shadow align-bottom ">
 
