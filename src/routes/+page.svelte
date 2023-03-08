@@ -1,8 +1,108 @@
 <script>
+    import { onMount } from 'svelte';
+    var fishWidth = 631;
+    var fishHeight = 309;
+    var scale = 0.6;
+    var scaledFishWidth = fishWidth * scale;
+    var scaledFishHeight = fishHeight * scale;
+
+    var flipFish = true;
+
+    var skewX = -10;
+    var dSkewX = 1;
+
+    var currX = 0;
+    var currY = 0;
+    
+    // Velocity based random walk
+    var vx = 1;
+    var vy = 0;
+    var ax = 0;
+    var ay = 0;
+
+    function moveSection(idStr, xOffset, yOffset, invert) {
+        var domElemnt = document.getElementById(idStr);
+
+        // var x = xOffset - fishWidth * (1 - scale) / 2 + xOffset
+        // var y = yOffset - fishHeight * (1 - scale) / 2 + yOffset
+        var x = xOffset - (fishWidth * (1-scale))/2;
+        var y = yOffset - (fishHeight * (1-scale));
+
+        var transformAttr = ' translate(' + x + ',' + y + ')';
+        if (invert) {
+            transformAttr += ` scale(${-1 * scale},${scale})`;
+        } else {
+            transformAttr += ` scale(${scale},${scale})`;
+        }
+        if (domElemnt) {
+            domElemnt.setAttribute('transform', transformAttr);
+        }
+    }
+
+    function moveFin(rotate) {
+        var domElement = document.getElementById("fin");
+        if (domElement) {
+            domElement.setAttribute('transform', `rotate(${rotate}, 200, 150)`);
+        }
+    }
+
+    onMount(() => {
+        window.setInterval(() => {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+
+            // Update position
+            currX = currX + vx * 1.5;
+            currY = currY + vy * 1.5;
+            // vx += (Math.random()) * 0.01 * (flipFish ? 1 : -1);
+            // vy += (Math.random() - 0.5) * 0.1;
+
+            ax = Math.random() - 0.5;
+            ay = Math.random() - 0.5;
+
+            var newVx = vx + ax;
+            if (Math.abs(newVx - vx) < 0.1) {
+                vx = newVx;
+            }
+            var newVy = vy + ay;
+            if (Math.abs(newVy - vy) < 0.1) {
+                vy = newVy;
+            }
+
+            //console.log(currX, width - scaledFishWidth, width);
+            if (currX > width - scaledFishWidth) {
+                vx = -0.5;
+                ax = 0;
+            } else if (currX < 0) {
+                vx = 0.5
+                ax = 0;
+            }
+            if (currY > height - scaledFishHeight) {
+                vy = -0.5;
+                ay = 0;
+            } else if (currY < 0) {
+                vy = 0.5;
+                ay = 0;
+            }
+
+            flipFish = vx >= 0 ? true : false;
+
+
+            // Update Skew
+            skewX += dSkewX * (Math.abs(vx) + Math.abs(vy))/2;
+            if (skewX > 10 || skewX < -10) {
+                dSkewX = -1 * dSkewX;
+            } 
+            
+            // Perform movements
+            moveSection("fish", currX, currY, flipFish);
+            moveFin(skewX);
+        }, 1000 / 60);
+    });
 </script>
 
 <div class="">
-    <svg width="631" height="309" viewBox="0 0 631 309" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg id="fish" width="631" height="309" viewBox="0 0 631 309" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask id="path-1-inside-1_9_169" fill="white">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M533.175 174.163C486.079 214.55 388.176 284.501 275.035 284.501C145.821 284.501 36.4814 193.263 0 159.025L17.2646 147.329C17.8501 146.932 17.8501 146.07 17.2646 145.673L0.126506 134.062C36.7315 100.274 145.958 8.00073 275.035 8.00073C388.426 8.00073 486.511 78.2613 533.487 118.606L605.956 64.5007C605.956 64.5007 629.006 105.267 630.091 146.501C631.176 187.735 605.956 228.501 605.956 228.501L533.175 174.163Z"/>
         </mask>
@@ -37,28 +137,36 @@
         <circle cx="471.252" cy="181" r="15" fill="#C3D7F4"/>
         <circle cx="441.252" cy="211" r="15" fill="#C3D7F4"/>
         <circle cx="411.252" cy="226" r="15" fill="#C3D7F4"/>
+
         <path d="M532 162C501 161.061 352 265.5 273 263C184.801 260.209 116.977 217.575 37.5 182C37.5 182 72 212 127 240.5C181.999 269 242 283.5 284 278C326 272.5 358 273 423 240.5C488 208 532 169.5 532 169.5L604.999 221.5L611 208.5C611 208.5 563 162.939 532 162Z" fill="#2B5AA1" fill-opacity="0.63"/>
-        <path d="M196.253 134.5C196.253 134.5 255.253 104 260.753 104C266.253 104 274.253 126.5 274.253 151.5C274.253 176.5 272.753 193 265.253 193C257.753 193 196.253 173 196.253 173C196.253 173 198.253 158.5 198.253 151.5C198.253 144.5 196.253 134.5 196.253 134.5Z" fill="#1B4179" fill-opacity="0.57" stroke="#1B4179" stroke-width="5"/>
-        <path d="M199 140L267.782 110.55" stroke="#1B4179"/>
-        <line x1="199.874" y1="143.516" x2="268.874" y2="125.516" stroke="#1B4179"/>
-        <line x1="198.952" y1="146.502" x2="270.952" y2="139.502" stroke="#1B4179"/>
-        <line x1="200.007" y1="150.5" x2="273.007" y2="151.5" stroke="#1B4179"/>
-        <line x1="199.061" y1="155.504" x2="272.061" y2="164.504" stroke="#1B4179"/>
-        <line x1="199.11" y1="159.512" x2="270.11" y2="175.512" stroke="#1B4179"/>
-        <line x1="199.152" y1="164.524" x2="268.152" y2="186.524" stroke="#1B4179"/>
-        <path d="M432.399 50.5085C432.399 50.5085 439.908 28.0749 444.908 21.5993C449.907 15.1237 469.42 6.05018 495.848 26.4542C522.276 46.8582 540.131 62.7332 533.313 71.5635C526.496 80.3939 511.475 98.269 511.475 98.269C511.475 98.269 478.468 75.6925 471.068 69.9794C463.668 64.2664 432.399 50.5085 432.399 50.5085Z" fill="#1B4179" fill-opacity="0.31" stroke="#1B4179" stroke-width="5"/>
-        <line x1="438.556" y1="50.771" x2="455.556" y2="17.771" stroke="#1B4179"/>
-        <line x1="443.555" y1="54.7718" x2="463.555" y2="15.7718" stroke="#1B4179"/>
-        <line x1="450.557" y1="56.7676" x2="471.557" y2="16.7676" stroke="#1B4179"/>
-        <line x1="456.557" y1="59.768" x2="478.557" y2="17.768" stroke="#1B4179"/>
-        <line x1="462.559" y1="62.7636" x2="484.559" y2="21.7636" stroke="#1B4179"/>
-        <line x1="468.555" y1="67.7723" x2="490.555" y2="24.7723" stroke="#1B4179"/>
-        <line x1="473.563" y1="70.7563" x2="497.563" y2="27.7563" stroke="#1B4179"/>
-        <line x1="479.574" y1="73.738" x2="503.574" y2="34.7379" stroke="#1B4179"/>
-        <line x1="485.586" y1="77.7201" x2="510.586" y2="40.7201" stroke="#1B4179"/>
-        <line x1="492.582" y1="82.7252" x2="517.582" y2="44.7252" stroke="#1B4179"/>
-        <line x1="498.591" y1="87.7125" x2="524.591" y2="50.7125" stroke="#1B4179"/>
-        <line x1="505.595" y1="92.7073" x2="531.595" y2="56.7073" stroke="#1B4179"/>
+
+        <g id="fin">
+            <path d="M196.253 134.5C196.253 134.5 255.253 104 260.753 104C266.253 104 274.253 126.5 274.253 151.5C274.253 176.5 272.753 193 265.253 193C257.753 193 196.253 173 196.253 173C196.253 173 198.253 158.5 198.253 151.5C198.253 144.5 196.253 134.5 196.253 134.5Z" fill="#1B4179" fill-opacity="0.57" stroke="#1B4179" stroke-width="5"/>
+            <path d="M199 140L267.782 110.55" stroke="#1B4179"/>
+            <line x1="199.874" y1="143.516" x2="268.874" y2="125.516" stroke="#1B4179"/>
+            <line x1="198.952" y1="146.502" x2="270.952" y2="139.502" stroke="#1B4179"/>
+            <line x1="200.007" y1="150.5" x2="273.007" y2="151.5" stroke="#1B4179"/>
+            <line x1="199.061" y1="155.504" x2="272.061" y2="164.504" stroke="#1B4179"/>
+            <line x1="199.11" y1="159.512" x2="270.11" y2="175.512" stroke="#1B4179"/>
+            <line x1="199.152" y1="164.524" x2="268.152" y2="186.524" stroke="#1B4179"/>
+        </g>
+
+        <g>
+            <path d="M432.399 50.5085C432.399 50.5085 439.908 28.0749 444.908 21.5993C449.907 15.1237 469.42 6.05018 495.848 26.4542C522.276 46.8582 540.131 62.7332 533.313 71.5635C526.496 80.3939 511.475 98.269 511.475 98.269C511.475 98.269 478.468 75.6925 471.068 69.9794C463.668 64.2664 432.399 50.5085 432.399 50.5085Z" fill="#1B4179" fill-opacity="0.31" stroke="#1B4179" stroke-width="5"/>
+            <line x1="438.556" y1="50.771" x2="455.556" y2="17.771" stroke="#1B4179"/>
+            <line x1="443.555" y1="54.7718" x2="463.555" y2="15.7718" stroke="#1B4179"/>
+            <line x1="450.557" y1="56.7676" x2="471.557" y2="16.7676" stroke="#1B4179"/>
+            <line x1="456.557" y1="59.768" x2="478.557" y2="17.768" stroke="#1B4179"/>
+            <line x1="462.559" y1="62.7636" x2="484.559" y2="21.7636" stroke="#1B4179"/>
+            <line x1="468.555" y1="67.7723" x2="490.555" y2="24.7723" stroke="#1B4179"/>
+            <line x1="473.563" y1="70.7563" x2="497.563" y2="27.7563" stroke="#1B4179"/>
+            <line x1="479.574" y1="73.738" x2="503.574" y2="34.7379" stroke="#1B4179"/>
+            <line x1="485.586" y1="77.7201" x2="510.586" y2="40.7201" stroke="#1B4179"/>
+            <line x1="492.582" y1="82.7252" x2="517.582" y2="44.7252" stroke="#1B4179"/>
+            <line x1="498.591" y1="87.7125" x2="524.591" y2="50.7125" stroke="#1B4179"/>
+            <line x1="505.595" y1="92.7073" x2="531.595" y2="56.7073" stroke="#1B4179"/>
+        </g>
+        
         <path d="M518.252 188.132C518.252 188.132 535.204 204.633 538.869 211.947C542.534 219.261 542.241 240.778 512.39 255.735C482.54 270.691 460.489 279.889 455.492 269.915C450.495 259.941 440.908 238.651 440.908 238.651C440.908 238.651 475.571 218.71 483.93 214.522C492.288 210.335 518.252 188.132 518.252 188.132Z" fill="#1B4179" fill-opacity="0.31" stroke="#1B4179" stroke-width="5"/>
         <line x1="515.343" y1="193.565" x2="537.697" y2="223.201" stroke="#1B4179"/>
         <line x1="509.569" y1="196.334" x2="536.027" y2="231.276" stroke="#1B4179"/>
