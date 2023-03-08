@@ -1,4 +1,33 @@
 <script>
+    import { onMount } from "svelte";
+    $: userActions = []
+
+    let lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
+
+    onMount(() => {
+        function updateUserActions() {
+            try {
+                fetch(`http://127.0.0.1:3000/getNewUserActions/${lastUserActionQueryTime}`)
+                    .then((response) => response.json())
+                    .then((actions) => {
+                        userActions = [...userActions, ...actions];
+                    })
+            } catch (error) {
+                console.log("could not connect to backend")
+            }
+            lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
+
+            // Prune entries older than 10000 ms
+            userActions = userActions.filter(item => 
+                new Date(item.lastAction).getMilliseconds() < (new Date(Date.now()).getMilliseconds() - 10000)
+            );
+        }   
+
+        const interval = setInterval(updateUserActions, 5000);
+        updateUserActions()
+
+        return () => clearInterval(interval)
+    });
 </script>
 
 <div class="">
@@ -77,4 +106,13 @@
         <path d="M282 15.183C177 9.99988 77 83.183 77 83.183C77 83.183 174.5 25.484 255.5 20.9999C336.5 16.5157 369 33.3167 402 46.9999C415.858 52.7458 441.56 67.1277 466 82.9999C499.76 104.925 530.019 132 533.5 132C539.5 132 605.5 79.183 605.5 79.183L604 74.683C604 74.683 538.5 125.183 533.5 125.683C528.5 126.183 426 18.9999 282 15.183Z" fill="white" fill-opacity="0.44"/>
         <path d="M77.1931 94.5033C77.1931 94.5033 78.4936 90.6582 87.5096 90.7187C96.5256 90.7791 98.681 94.6473 98.681 94.6473" stroke="#0E2547" stroke-width="5"/>
         </svg>
+
+</div>
+
+<div class="absolute bottom-5 left-5 w-full text-4xl">
+    {#each userActions as { _id, actionTaken, petName }}
+        <div class="chat chat-start">
+            <div class="chat-bubble">{_id} has {actionTaken} {petName}!</div>
+        </div>
+    {/each}
 </div>

@@ -6,7 +6,7 @@
     onMount(() => {
         function updateStats() {
             try {
-                fetch('http://127.0.0.1:3000/petStats/test')
+                fetch('http://127.0.0.1:3000/petStats/mr.fish')
                     .then((response) => response.json())
                     .then((stats) => {
                         const hungerObj = stats.find(stat => stat.statName == "hunger")
@@ -27,7 +27,7 @@
             }
         }   
 
-        const interval = setInterval(updateStats, 2000);
+        const interval = setInterval(updateStats, 5000);
         updateStats()
 
         return () => clearInterval(interval)
