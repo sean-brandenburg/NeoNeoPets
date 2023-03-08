@@ -9,10 +9,16 @@ import { type PetStat, PetStatsSchema, getStatsString } from './models/PetStats'
 // import fetch from 'node-fetch'
 const config = require('../config.json');
 
+// import { handler } from '../../build/handler.js';
+// const handler = require('../../build/handler.js');
+// import handler from '../../build/handler.js'
+
 import { getObjListener, getObjectsJSON } from './utils/realmHelpers'
 import cors from 'cors'
 export const exp = express()
 exp.use(cors())
+exp.use(express.static('../build/'))
+
 
 const hostname = '127.0.0.1'
 const port = 3000
@@ -79,6 +85,7 @@ async function main () {
   realm = await setup(app)
   const subs = realm.subscriptions
 
+  console.log("1")
   await subs.update(mutableSubs => {
     // Clear out any subscriptions that may have been added in a previous execution
     const nRemoved = mutableSubs.removeAll()
@@ -89,11 +96,13 @@ async function main () {
     mutableSubs.add(realm.objects(UserInfoSchema.name).filtered('truepredicate'))
   })
   await subs.waitForSynchronization()
+  console.log("2")
 
   const petStats = realm.objects<PetStat>(PetStatsSchema.name)
   petStats.addListener(getObjListener<PetStat>(PetStatsSchema.name, getStatsString))
   const userInfo = realm.objects<UserInfo>(UserInfoSchema.name)
   userInfo.addListener(getObjListener<UserInfo>(UserInfoSchema.name, getUserInfoString))
+  console.log("3")
 }
 
 main()
@@ -112,6 +121,7 @@ exp.get('/petStats/', (req: Request, res: Response) => {
   if (realm == null) {
     res.statusCode = 400
     res.end()
+    return
   }
 
   res.statusCode = 200
@@ -129,6 +139,7 @@ exp.get('/getNewUserActions/:lastQueriedTime', (req: Request, res: Response) => 
   if (realm == null) {
     res.statusCode = 400
     res.end()
+    return
   }
 
   res.statusCode = 200
