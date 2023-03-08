@@ -21,7 +21,7 @@ exp.use(express.static('../build/'))
 
 
 const hostname = '127.0.0.1'
-const port = 3000
+const port = process.env.PORT || 3000;
 
 const app = new Realm.App({
   id: config.AppId,
