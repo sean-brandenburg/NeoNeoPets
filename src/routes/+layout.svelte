@@ -6,7 +6,7 @@
     onMount(() => {
         function updateStats() {
             try {
-                fetch('http://127.0.0.1:3000/petStats/mr.fish')
+                fetch('http://127.0.0.1:3000/petStats/mr.fish austin')
                     .then((response) => response.json())
                     .then((stats) => {
                         const hungerObj = stats.find(stat => stat.statName == "hunger")

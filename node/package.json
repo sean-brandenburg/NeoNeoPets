@@ -1,0 +1,32 @@
+{
+  "name": "neoneopets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nyc": "npx tsc && DISABLE_ESLINT_PLUGIN=true node dist/app.js nyc",
+    "atx": "npx tsc && DISABLE_ESLINT_PLUGIN=true node dist/app.js atx",
+    "cloud": "npx tsc && DISABLE_ESLINT_PLUGIN=true node dist/app.js cloud",
+    "lint": "eslint . --ext .ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.9",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.9",
+    "realm": "^11.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.6",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "eslint": "^8.35.0",
+    "eslint-config-standard-with-typescript": "^34.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "typescript": "^4.9.5"
+  }
+}
