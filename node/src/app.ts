@@ -80,12 +80,13 @@ async function getOfflineStatus (): Promise<void> {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 async function main () {
+  console.log("Starting Main")
   const credentials = Realm.Credentials.anonymous()
   await app.logIn(credentials)
   realm = await setup(app)
   const subs = realm.subscriptions
 
-  console.log("1")
+  console.log("Adding Subscriptions")
   await subs.update(mutableSubs => {
     // Clear out any subscriptions that may have been added in a previous execution
     const nRemoved = mutableSubs.removeAll()
@@ -96,13 +97,12 @@ async function main () {
     mutableSubs.add(realm.objects(UserInfoSchema.name).filtered('truepredicate'))
   })
   await subs.waitForSynchronization()
-  console.log("2")
 
+  console.log("synchronized")
   const petStats = realm.objects<PetStat>(PetStatsSchema.name)
   petStats.addListener(getObjListener<PetStat>(PetStatsSchema.name, getStatsString))
   const userInfo = realm.objects<UserInfo>(UserInfoSchema.name)
   userInfo.addListener(getObjListener<UserInfo>(UserInfoSchema.name, getUserInfoString))
-  console.log("3")
 }
 
 main()
