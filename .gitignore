@@ -18,3 +18,7 @@ vite.config.js.timestamp-*
 .vercel
 .test-tmp
 symlink-from
+config.json
+node/mongodb-realm/
+node/.eslintrc.js
+build/
