@@ -7,7 +7,7 @@ import { type UserInfo, UserInfoSchema, getUserInfoString } from './models/UserI
 import { type PetStat, PetStatsSchema, getStatsString } from './models/PetStats'
 
 // import fetch from 'node-fetch'
-const config = require('../../config.json');
+const config = require('../config.json');
 
 // import { handler } from '../../build/handler.js';
 // const handler = require('../../build/handler.js');
