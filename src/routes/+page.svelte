@@ -7,7 +7,14 @@
     import Bored from './BoredWhite.svelte';
     import { petStats } from '$lib/statStores.js';
 
-    var notificationLingerTimeMs = 10000
+    const actionMap = {
+        "hunger": "fed",
+        "thirst": "given water to",
+        "happiness": "played with",
+        "cleanliness": "cleaned",
+    }
+
+    const notificationLingerTimeMs = 10000
 
     var fishWidth = 631;
     var fishHeight = 309;
@@ -155,7 +162,7 @@
 <div class="absolute bottom-5 left-5 w-full text-4xl">
     {#each userActions as { _id, actionTaken, petName }}
         <div class="chat chat-start">
-            <div class="chat-bubble">{_id} has {actionTaken} {petName}!</div>
+            <div class="chat-bubble">{_id} has {actionMap[actionTaken]} {petName}!</div>
         </div>
     {/each}
 </div>
