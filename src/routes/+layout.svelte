@@ -12,12 +12,13 @@
                         stats.forEach(stat => {
                             $petStats[stat.location][stat.statName] = stat ? stat.statValue : -1
                         });
-                        console.log($petStats)
                     })
             fetch('onlineStatus/')
                 .then((response) => response.json())
                 .then((status) => {
-                    console.log("Online Status: " + status.online)
+                    if (status){
+                        console.log("Online Status: " + status.online)
+                    }
                 })
             } catch (error) {
                 console.log("could not connect to backend")
