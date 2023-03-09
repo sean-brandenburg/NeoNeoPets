@@ -16,7 +16,7 @@ exp.use(cors())
 exp.use(express.static('../build/'))
 
 
-const hostname = '127.0.0.1'
+const hostname = '0.0.0.0'
 const port = process.env.PORT || 3000;
 
 const app = new Realm.App({
@@ -89,6 +89,7 @@ async function main () {
     console.log(`Cleared out previous subscriptions (${nRemoved} removed)`)
 
     // TODO: Subscription pet names from startup params
+    'location == "nyc"'
     mutableSubs.add(realm.objects(PetStatsSchema.name).filtered('truepredicate'))
     mutableSubs.add(realm.objects(UserInfoSchema.name).filtered('truepredicate'))
   })
