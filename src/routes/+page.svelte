@@ -42,7 +42,7 @@
     var happy = $petStats.atx.happiness > 80;
 
     $: userActions = []
-    $: onlineStatus = true
+    $: MTSSonline = true
     let lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
 
     function moveSection(idStr, xOffset, yOffset, invert) {
@@ -142,7 +142,7 @@
                     })
                     .then((status) => {
                         if (status){
-                            onlineStatus = status.online
+                            MTSSonline = status.online
                         }
                     })
             } catch (error) {
@@ -180,12 +180,12 @@
     {/each}
 </div>
 
-{#if onlineStatus}
+{#if !MTSSonline}
 <div class="absolute bottom-5 right-5 w-64">
     <div class="alert alert-warning">
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>Internet connection lost!</span>
+            <span>Disconnected From Cloud!</span>
         </div>
     </div>
 </div>

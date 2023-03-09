@@ -67,7 +67,9 @@ function atrophyPetStats (): void {
 async function getOfflineStatus (): Promise<void> {
   try {
     const response = await fetch(`${baseURL}/api/client/v2.0/tiered-sync/status`)
-    const onlineStatus = (await response.json()).cloud_connected
+    var res = await response.json()
+    const onlineStatus = (res).cloud_connected
+
     if (realm != null) {
       realm.write(() => {
         const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online"`)
