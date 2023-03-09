@@ -5,6 +5,7 @@
     import Happy from './HappyWhite.svelte';
     import Fainted from './FaintedWhite.svelte';
     import Bored from './BoredWhite.svelte';
+    import { petStats } from '$lib/statStores.js';
 
     var fishWidth = 631;
     var fishHeight = 309;
@@ -27,9 +28,9 @@
     var ay = 0;
 
     // TODO: figure out how to get these from the other component:
-    var hunger = 30;
-    var happy = false;
 
+
+    var happy = $petStats.atx.happiness > 80;
 
     $: userActions = []
     let lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
@@ -138,5 +139,15 @@
 </script>
 
 <div class="">
-    <Bored />
+    {#if $petStats.atx.hunger == 0 || $petStats.atx.happiness == 0 || $petStats.atx.cleanliness == 0 || $petStats.atx.thirst == 0}
+        <Fainted />
+    {:else if $petStats.atx.hunger < 50  || $petStats.atx.thirst < 50}
+        <Hungry />
+    {:else if $petStats.atx.happiness > 80}
+        <Happy />
+    {:else if $petStats.atx.happiness < 50}
+        <Bored />
+    {:else}
+        <Normal />
+    {/if}
 </div>

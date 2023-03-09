@@ -7,7 +7,7 @@
         function updateStats() {
             console.log("HERE")
             try {
-                fetch('http://localhost:3000/petStats/')
+                fetch('petStats/')
                     .then((response) => response.json())
                     .then((stats) => {
                         stats.forEach(stat => {
