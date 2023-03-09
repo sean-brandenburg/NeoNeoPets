@@ -28,8 +28,8 @@
 
 </script>
 
-<div class= "flex flex-col items-center pt-4 h-screen">
-    <div class="stats shadow align-bottom ">
+<div class= "flex flex-col pt-4 h-screen">
+    <div class="stats shadow align-bottom items-center mx-64">
 
         <div class="stat">
         <div class="stat-figure text-primary">

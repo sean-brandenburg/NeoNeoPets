@@ -16,6 +16,7 @@ const config = {
           'body': {
             'background-color': '#407CD6',
             'border-color': '#407CD6',
+            'overflow': 'hidden',
           },
         },
       },
