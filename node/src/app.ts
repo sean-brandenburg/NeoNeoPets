@@ -170,7 +170,7 @@ exp.get('/onlineStatus', (req: Request, res: Response) => {
 
   var onlineStatus = getObjectsJSON<PetStat>(realm, PetStatsSchema.name, query)
   if (!onlineStatus){
-    res.send()
+    res.statusCode = 400
     res.end()
     return
   }

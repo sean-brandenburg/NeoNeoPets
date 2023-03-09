@@ -14,7 +14,12 @@
                         });
                     })
             fetch('onlineStatus/')
-                .then((response) => response.json())
+                .then((response) => {
+                    if (response.status == 200){
+                        return response.json()
+                    }
+                    return null
+                })
                 .then((status) => {
                     if (status){
                         console.log("Online Status: " + status.online)
