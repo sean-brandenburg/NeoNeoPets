@@ -6,12 +6,8 @@ import type { Request, Response } from 'express'
 import { type UserInfo, UserInfoSchema, getUserInfoString } from './models/UserInfo'
 import { type PetStat, PetStatsSchema, getStatsString } from './models/PetStats'
 
-// import fetch from 'node-fetch'
+import fetch from 'node-fetch'
 const config = require('../config.json');
-
-// import { handler } from '../../build/handler.js';
-// const handler = require('../../build/handler.js');
-// import handler from '../../build/handler.js'
 
 import { getObjListener, getObjectsJSON } from './utils/realmHelpers'
 import cors from 'cors'

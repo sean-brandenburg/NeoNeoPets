@@ -1,8 +1,18 @@
 import { writable } from 'svelte/store';
 
-export const hunger = writable(-1);
-export const thirst = writable(-1);
-export const cleanliness = writable(-1);
-export const happiness = writable(-1);
-
-console.log("statStore")
+export const petStats= writable({
+    "nyc": {
+        "hunger": -1,
+        "thirst": -1,
+        "cleanliness": -1,
+        "happiness": -1,
+        "online": 100,
+    },
+    "atx": {
+        "hunger": -1,
+        "thirst": -1,
+        "cleanliness": -1,
+        "happiness": -1,
+        "online": 100,
+    },
+});
