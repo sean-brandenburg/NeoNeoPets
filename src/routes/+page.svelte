@@ -42,6 +42,7 @@
     var happy = $petStats.atx.happiness > 80;
 
     $: userActions = []
+    $: onlineStatus = true
     let lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
 
     function moveSection(idStr, xOffset, yOffset, invert) {
@@ -132,6 +133,18 @@
                     .then((actions) => {
                         userActions = actions
                     })
+                fetch('onlineStatus/')
+                    .then((response) => {
+                        if (response.status == 200){
+                            return response.json()
+                        }
+                        return null
+                    })
+                    .then((status) => {
+                        if (status){
+                            onlineStatus = status.online
+                        }
+                    })
             } catch (error) {
                 console.log("could not connect to backend")
             }
@@ -166,3 +179,14 @@
         </div>
     {/each}
 </div>
+
+{#if onlineStatus}
+<div class="absolute bottom-5 right-5 w-64">
+    <div class="alert alert-warning">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Internet connection lost!</span>
+        </div>
+    </div>
+</div>
+{/if}

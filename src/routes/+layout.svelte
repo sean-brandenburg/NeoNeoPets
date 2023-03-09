@@ -13,18 +13,6 @@
                             $petStats[stat.location][stat.statName] = stat ? stat.statValue : -1
                         });
                     })
-            fetch('onlineStatus/')
-                .then((response) => {
-                    if (response.status == 200){
-                        return response.json()
-                    }
-                    return null
-                })
-                .then((status) => {
-                    if (status){
-                        console.log("Online Status: " + status.online)
-                    }
-                })
             } catch (error) {
                 console.log("could not connect to backend")
             }
