@@ -7,6 +7,8 @@
     import Bored from './BoredWhite.svelte';
     import { petStats } from '$lib/statStores.js';
 
+    var notificationLingerTimeMs = 10000
+
     var fishWidth = 631;
     var fishHeight = 309;
     var scale = 0.6;
@@ -118,21 +120,19 @@
 
         function updateUserActions() {
             try {
-                fetch(`http://127.0.0.1:3000/getNewUserActions/${lastUserActionQueryTime}`)
+                fetch(`getNewUserActions/${lastUserActionQueryTime}`)
                     .then((response) => response.json())
                     .then((actions) => {
-                        userActions = [...userActions, ...actions];
+                        userActions = actions
                     })
             } catch (error) {
                 console.log("could not connect to backend")
             }
-            lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
-            // Prune entries older than 10000 ms
-            userActions = userActions.filter(item => 
-                new Date(item.lastAction).getMilliseconds() < (new Date(Date.now()).getMilliseconds() - 10000)
-            );
+
+            // Get all entries less than 10 seconds old
+            lastUserActionQueryTime = new Date(Date.now() - notificationLingerTimeMs).toISOString().replace(/.\d+Z$/g, "");
         }   
-        const interval = setInterval(updateUserActions, 5000);
+        const interval = setInterval(updateUserActions, 2000);
         updateUserActions()
         return () => clearInterval(interval)
     });
@@ -150,4 +150,12 @@
     {:else}
         <Normal />
     {/if}
+</div>
+
+<div class="absolute bottom-5 left-5 w-full text-4xl">
+    {#each userActions as { _id, actionTaken, petName }}
+        <div class="chat chat-start">
+            <div class="chat-bubble">{_id} has {actionTaken} {petName}!</div>
+        </div>
+    {/each}
 </div>

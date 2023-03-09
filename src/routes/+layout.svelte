@@ -5,7 +5,6 @@
 
     onMount(() => {
         function updateStats() {
-            console.log("HERE")
             try {
                 fetch('petStats/')
                     .then((response) => response.json())
@@ -15,12 +14,17 @@
                         });
                         console.log($petStats)
                     })
+            fetch('onlineStatus/')
+                .then((response) => response.json())
+                .then((status) => {
+                    console.log("Online Status: " + status.online)
+                })
             } catch (error) {
                 console.log("could not connect to backend")
             }
         }   
 
-        const interval = setInterval(updateStats, 5000);
+        const interval = setInterval(updateStats, 2000);
         updateStats()
 
         return () => clearInterval(interval)
@@ -29,7 +33,7 @@
 </script>
 
 <div class= "flex flex-col pt-4 h-screen">
-    <div class="stats shadow align-bottom items-center mx-64">
+    <div class="stats shadow align-bottom items-center mx-auto">
 
         <div class="stat">
         <div class="stat-figure text-primary">
