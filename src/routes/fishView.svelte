@@ -183,6 +183,8 @@
         {#if location == "nyc"} 
             {#if $petStats[location].hunger == 0 || $petStats[location].happiness == 0 || $petStats[location].cleanliness == 0 || $petStats[location].thirst == 0}
                 <FaintedWhite fishId={fishId} finId={finId} />
+            {:else if $petStats[location].hunger > 100 || $petStats[location].happiness > 100 || $petStats[location].cleanliness > 100 || $petStats[location].thirst > 100}
+                <HungryWhite fishId={fishId} finId={finId} />
             {:else if $petStats[location].hunger < 50  || $petStats[location].thirst < 50}
                 <HungryWhite fishId={fishId} finId={finId} />
             {:else if $petStats[location].happiness > 80}
@@ -197,6 +199,8 @@
         {#if location == "atx"} 
             {#if $petStats[location].hunger == 0 || $petStats[location].happiness == 0 || $petStats[location].cleanliness == 0 || $petStats[location].thirst == 0}
                 <FaintedDark fishId={fishId} finId={finId} />
+            {:else if $petStats[location].hunger > 100 || $petStats[location].happiness > 100 || $petStats[location].cleanliness > 100 || $petStats[location].thirst > 100}
+                <HungryDark fishId={fishId} finId={finId} />
             {:else if $petStats[location].hunger < 50  || $petStats[location].thirst < 50}
                 <HungryDark fishId={fishId} finId={finId} />
             {:else if $petStats[location].happiness > 80}

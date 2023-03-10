@@ -158,6 +158,32 @@ exp.get('/getNewUserActions/:lastQueriedTime', (req: Request, res: Response) => 
   res.end()
 })
 
+exp.get('/adminReset/:location', (req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'application/json')
+  if(req.params.location != "atx" && req.params.location != "nyc"){
+    res.statusCode = 400
+    res.send({"error": "invalid location"})
+    res.end()
+    return
+  }
+
+  res.statusCode = 200
+  const query = `location == "${req.params.location}" AND statName != "online"`
+  console.log(`Resetting stats with query: ${query}`)
+
+  if (realm != null) {
+    realm.write(() => {
+      const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(query)
+      for (const stat of statsObjects) {
+          stat.statValue = 100
+      }
+    })
+  }
+
+  res.send({"msg": `Resetting stats with query: ${query}`})
+  res.end()
+})
+
 exp.get('/onlineStatus', (req: Request, res: Response) => {
   res.setHeader('Content-Type', 'application/json')
   if (realm == null) {
