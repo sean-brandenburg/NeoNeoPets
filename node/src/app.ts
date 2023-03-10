@@ -16,12 +16,15 @@ exp.use(cors())
 exp.use(express.static('../build/'))
 
 
-const hostname = '127.0.0.1'
+const environment = process.argv[2] // Cloud/nyc/atx
+const baseURL = config[environment]
+
+const hostname = '0.0.0.0'
 const port = process.env.PORT || 3000;
 
 const app = new Realm.App({
   id: config.AppId,
-  baseUrl: config[process.argv[2]] // Cloud/nyc/atx baseUrl
+  baseUrl: baseURL
 })
 
 let realm: Realm = null
@@ -63,14 +66,21 @@ function atrophyPetStats (): void {
 
 async function getOfflineStatus (): Promise<void> {
   try {
-    // const response = await fetch('http://10.96.10.247/api/client/v2.0/tiered-sync/status', {})
-    // const onlineStatus = await response.json().cloud_connected
-    // const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered('statName == "online"')
-    // for (const stat of statsObjects) {
-    //   stat.statValue = 
-    // }
+    const response = await fetch(`${baseURL}/api/client/v2.0/tiered-sync/status`)
+    var res = await response.json()
+    const onlineStatus = (res).cloud_connected
+
+    if (realm != null) {
+      realm.write(() => {
+        // Only do this update if this node server is configured to talk to an MTSS
+        const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online" AND location == "${environment}"`)
+        for (const stat of statsObjects) {
+          stat.statValue = onlineStatus ? 100 : 0
+        }
+      })
+    }
   } catch (error) {
-    console.warn('could not get online status')
+    console.warn(`could not get online status: ${error}`)
   }
 }
 
@@ -147,10 +157,41 @@ exp.get('/getNewUserActions/:lastQueriedTime', (req: Request, res: Response) => 
   res.end()
 })
 
+exp.get('/onlineStatus', (req: Request, res: Response) => {
+  // TODO:
+  if (realm == null) {
+    res.statusCode = 400
+    res.end()
+    return
+  }
+
+  res.setHeader('Content-Type', 'application/json')
+
+  const query = `statName == "online" AND location == "${environment}"`
+  console.log(`Getting onlineStatus with query: ${query}`)
+
+  var onlineStatus = getObjectsJSON<PetStat>(realm, PetStatsSchema.name, query)
+
+  if (!onlineStatus || onlineStatus.length == 0){
+    res.statusCode = 400
+  }
+
+  if('statValue' in onlineStatus){
+    res.statusCode = 200
+    res.send({
+      "online": onlineStatus[0].statValue != 0
+    })
+  }
+
+  res.end()
+})
+
 exp.listen(port, hostname, () => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  setInterval(getOfflineStatus, 3000)
-  setInterval(atrophyPetStats, 3000)
+  if (environment != 'cloud'){
+    setInterval(getOfflineStatus, 5000)
+    setInterval(atrophyPetStats, 10000)
+  }
 
   console.log(`Server running at http://${hostname}:${port}/`)
 })

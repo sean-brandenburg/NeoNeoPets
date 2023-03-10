@@ -5,7 +5,6 @@
 
     onMount(() => {
         function updateStats() {
-            console.log("HERE")
             try {
                 fetch('http://localhost:3000/petStats/')
                     .then((response) => response.json())
@@ -15,14 +14,13 @@
                             $activeLocations[stat.location] = true
                             console.log("location", stat.location)
                         });
-                        console.log($petStats)
                     })
             } catch (error) {
                 console.log("could not connect to backend")
             }
         }
 
-        const interval = setInterval(updateStats, 5000);
+        const interval = setInterval(updateStats, 2000);
         updateStats()
 
         return () => clearInterval(interval)
