@@ -6,14 +6,13 @@
     onMount(() => {
         function updateStats() {
             try {
-                console.log("PET STATS: ")
                 fetch(`${endpointHostname}petStats/`)
                     .then((response) => response.json())
                     .then((stats) => {
+                        console.log("STATS: " + stats)
                         stats.forEach(stat => {
                             $petStats[stat.location][stat.statName] = stat ? stat.statValue : -1
                             $activeLocations[stat.location] = true
-                            console.log("location", stat.location)
                         });
                     })
             } catch (error) {
