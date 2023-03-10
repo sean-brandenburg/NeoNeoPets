@@ -49,9 +49,6 @@
 
     var happy = $petStats[location].happiness > 80;
 
-    $: userActions = []
-    let lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
-
     function moveSection(idStr, xOffset, yOffset, invert) {
         var domElemnt = document.getElementById(idStr);
 
@@ -140,37 +137,45 @@
     <div class="h-full w-full overflow-hidden relative" id="fish-view">
         <div class= {"flex flex-col absolute left-0 right-0 " + statsPosition}>
             <div class="stats shadow align-bottom items-center mx-auto">
+
                 <div class="stat">
-                <div class="stat-figure text-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <div class="stat-title">Location</div>
+                    <div class="stat-value text-secondary text-3xl"> {(location) ? location.toUpperCase() : "..."} </div>
                 </div>
-                <div class="stat-title">Hunger</div>
-        
-                <div class="stat-value text-primary"> {($petStats[location].hunger == -1) ? '...' : `${$petStats[location].hunger}/ 100`}</div>
+
+                <div class="stat">
+                    <div class="stat-figure text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <div class="stat-title">Hunger</div>
+                    <div class="stat-value text-primary text-3xl"> {($petStats[location].hunger == -1) ? '...' : `${$petStats[location].hunger}/ 100`}</div>
                 </div>
         
                 <div class="stat">
-                <div class="stat-figure text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <div class="stat-title text-lg">Thirst</div>
-                <div class="stat-value text-secondary"> {($petStats[location].thirst == -1) ? '...' : `${$petStats[location].thirst}/ 100`}</div>
+                    <div class="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <div class="stat-title">Thirst</div>
+                    <div class="stat-value text-secondary text-3xl"> {($petStats[location].thirst == -1) ? '...' : `${$petStats[location].thirst}/ 100`}</div>
                 </div>
         
                 <div class="stat">
                     <div class="stat-figure text-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                     </div>
                     <div class="stat-title">Cleanliness</div>
-                    <div class="stat-value text-primary"> {($petStats[location].cleanliness == -1) ? '...' : `${$petStats[location].cleanliness}/ 100`}</div>
+                    <div class="stat-value text-primary text-3xl"> {($petStats[location].cleanliness == -1) ? '...' : `${$petStats[location].cleanliness}/ 100`}</div>
                 </div>
                 
                 <div class="stat">
                     <div class="stat-figure text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                     </div>
                     <div class="stat-title">Happiness</div>
-                    <div class="stat-value text-secondary"> {($petStats[location].happiness == -1) ? '...' : `${$petStats[location].happiness}/ 100`}</div>
+                    <div class="stat-value text-secondary text-3xl"> {($petStats[location].happiness == -1) ? '...' : `${$petStats[location].happiness}/ 100`}</div>
                 </div>
             </div>
         </div>

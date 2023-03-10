@@ -18,6 +18,7 @@ exp.use(express.static('../build/'))
 
 const environment = process.argv[2] // Cloud/nyc/atx
 const baseURL = config[environment]
+console.log("CONNECTING TO SYNC ENDPOINT: " + baseURL)
 
 const hostname = '0.0.0.0'
 const port = process.env.PORT || 3000;
@@ -158,31 +159,41 @@ exp.get('/getNewUserActions/:lastQueriedTime', (req: Request, res: Response) => 
 })
 
 exp.get('/onlineStatus', (req: Request, res: Response) => {
-  // TODO:
+  res.setHeader('Content-Type', 'application/json')
   if (realm == null) {
     res.statusCode = 400
+    res.send({"online": true})
     res.end()
     return
   }
 
-  res.setHeader('Content-Type', 'application/json')
 
   const query = `statName == "online" AND location == "${environment}"`
   console.log(`Getting onlineStatus with query: ${query}`)
 
   var onlineStatus = getObjectsJSON<PetStat>(realm, PetStatsSchema.name, query)
+  console.log("ONLINE STATUS: " + onlineStatus[0].statValue)
 
+  // Default to true but return error status code
   if (!onlineStatus || onlineStatus.length == 0){
     res.statusCode = 400
+    res.send({"online": true})
+    res.end()
+    return
   }
 
-  if('statValue' in onlineStatus){
+  if('statValue' in onlineStatus[0]){
     res.statusCode = 200
     res.send({
       "online": onlineStatus[0].statValue != 0
     })
+    res.end()
+    return
   }
 
+  // Default to online true and 400 code
+  res.statusCode = 400
+  res.send({"online": true})
   res.end()
 })
 
@@ -190,7 +201,7 @@ exp.listen(port, hostname, () => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   if (environment != 'cloud'){
     setInterval(getOfflineStatus, 5000)
-    setInterval(atrophyPetStats, 10000)
+    setInterval(atrophyPetStats, 60000)
   }
 
   console.log(`Server running at http://${hostname}:${port}/`)

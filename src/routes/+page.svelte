@@ -138,13 +138,9 @@
                         userActions = actions
                     })
                 fetch(`${endpointHostname}onlineStatus/`)
-                    .then((response) => {
-                        if (response.status == 200){
-                            return response.json()
-                        }
-                        return null
-                    })
+                    .then((response) => response.json())
                     .then((status) => {
+                        console.log("ONLINE STATUS: " + status)
                         if (status){
                             MTSSonline = status.online
                         }
@@ -170,16 +166,26 @@
         <FishView location="atx" renderDivider={'nyc' in $activeLocations}></FishView>
     {/if}
 
-    <div class="absolute bottom-5 left-5 w-full text-4xl">
-        {#each userActions as { _id, actionTaken, petName }}
-            <div class="chat chat-start opacity-50">
-                <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName}!</div>
-            </div>
-        {/each}
-    </div>
+    {#if Object.keys($activeLocations).length == 2}
+        <div class="absolute bottom-32 left-5 w-full text-4xl">
+            {#each userActions as { _id, actionTaken, petName }}
+                <div class="chat chat-start opacity-50">
+                    <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName}!</div>
+                </div>
+            {/each}
+        </div>
+    {:else}
+         <div class="absolute bottom-5 left-5 w-full text-4xl">
+            {#each userActions as { _id, actionTaken, petName }}
+                <div class="chat chat-start opacity-50">
+                    <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName}!</div>
+                </div>
+            {/each}
+        </div>           
+    {/if}
     
     {#if !MTSSonline}
-    <div class="absolute bottom-5 right-5 w-64">
+    <div class="absolute bottom-5 right-5 w-auto">
         <div class="alert alert-warning">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
