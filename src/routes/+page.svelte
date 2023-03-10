@@ -2,6 +2,7 @@
     import FishView from './fishView.svelte';
     import { petStats, activeLocations } from '$lib/statStores.js';
     import { onMount } from "svelte";
+    import endpointHostname from './+layout.svelte'
 
     const actionMap = {
         "hunger": "fed",
@@ -132,12 +133,12 @@
 
         function updateUserActions() {
             try {
-                fetch(`getNewUserActions/${lastUserActionQueryTime}`)
+                fetch(`${endpointHostname}getNewUserActions/${lastUserActionQueryTime}`)
                     .then((response) => response.json())
                     .then((actions) => {
                         userActions = actions
                     })
-                fetch('onlineStatus/')
+                fetch(`${endpointHostname}onlineStatus/`)
                     .then((response) => {
                         if (response.status == 200){
                             return response.json()

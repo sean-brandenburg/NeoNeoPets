@@ -3,10 +3,13 @@
     import { onMount } from "svelte";
     import { petStats, activeLocations } from '$lib/statStores.js';
 
+    export const endpointHostname = ""
+    // export const endpointHostname = "http://localhost:3000/"
+
     onMount(() => {
         function updateStats() {
             try {
-                fetch('petStats/')
+                fetch(`${endpointHostname}petStats/`)
                     .then((response) => response.json())
                     .then((stats) => {
                         stats.forEach(stat => {

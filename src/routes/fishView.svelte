@@ -11,6 +11,7 @@
     import FaintedDark from './FaintedDark.svelte';
     import BoredDark from './BoredDark.svelte';
     import { petStats } from '$lib/statStores.js';
+    import endpointHostname from './+layout.svelte'
     
     export let location;
     export let renderDivider;
@@ -136,7 +137,7 @@
 
         function updateUserActions() {
             try {
-                fetch(`getNewUserActions/${lastUserActionQueryTime}`)
+                fetch(`${endpointHostname}getNewUserActions/${lastUserActionQueryTime}`)
                     .then((response) => response.json())
                     .then((actions) => {
                         userActions = [...userActions, ...actions];
