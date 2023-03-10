@@ -176,9 +176,9 @@
         </div>
     {:else}
          <div class="absolute bottom-5 left-5 w-full text-4xl">
-            {#each userActions as { _id, actionTaken, petName }}
+            {#each userActions as { _id, actionTaken, petName, location }}
                 <div class="chat chat-start opacity-50">
-                    <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName}!</div>
+                    <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName} in {location.toUpperCase()}!</div>
                 </div>
             {/each}
         </div>           
