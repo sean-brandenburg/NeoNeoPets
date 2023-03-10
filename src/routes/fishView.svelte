@@ -10,8 +10,7 @@
     import HappyDark from './HappyDark.svelte';
     import FaintedDark from './FaintedDark.svelte';
     import BoredDark from './BoredDark.svelte';
-    import { petStats } from '$lib/statStores.js';
-    import endpointHostname from './+layout.svelte'
+    import { petStats, endpointHostname } from '$lib/statStores.js';
     
     export let location;
     export let renderDivider;
@@ -134,26 +133,6 @@
             moveSection(fishId, currX, currY, flipFish);
             moveFin(skewX);
         }, 1000 / 60);
-
-        function updateUserActions() {
-            try {
-                fetch(`${endpointHostname}getNewUserActions/${lastUserActionQueryTime}`)
-                    .then((response) => response.json())
-                    .then((actions) => {
-                        userActions = [...userActions, ...actions];
-                    })
-            } catch (error) {
-                console.log("could not connect to backend")
-            }
-            lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
-            // Prune entries older than 10000 ms
-            userActions = userActions.filter(item => 
-                new Date(item.lastAction).getMilliseconds() < (new Date(Date.now()).getMilliseconds() - 10000)
-            );
-        }   
-        const interval = setInterval(updateUserActions, 5000);
-        updateUserActions()
-        return () => clearInterval(interval)
     });
 </script>
 

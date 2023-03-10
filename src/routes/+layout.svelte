@@ -1,14 +1,12 @@
 <script>
     import "../app.css";
     import { onMount } from "svelte";
-    import { petStats, activeLocations } from '$lib/statStores.js';
-
-    export const endpointHostname = ""
-    // export const endpointHostname = "http://localhost:3000/"
+    import { petStats, activeLocations, endpointHostname } from '$lib/statStores.js';
 
     onMount(() => {
         function updateStats() {
             try {
+                console.log("PET STATS: ")
                 fetch(`${endpointHostname}petStats/`)
                     .then((response) => response.json())
                     .then((stats) => {

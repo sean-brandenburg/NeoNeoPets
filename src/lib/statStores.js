@@ -18,3 +18,6 @@ export const petStats= writable({
 });
 
 export const activeLocations = writable({});
+
+export const endpointHostname = ""
+// export const endpointHostname = "http://localhost:3000/"

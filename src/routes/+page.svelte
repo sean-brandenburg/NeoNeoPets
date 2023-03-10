@@ -1,8 +1,7 @@
 <script>
     import FishView from './fishView.svelte';
-    import { petStats, activeLocations } from '$lib/statStores.js';
+    import { petStats, activeLocations, endpointHostname } from '$lib/statStores.js';
     import { onMount } from "svelte";
-    import endpointHostname from './+layout.svelte'
 
     const actionMap = {
         "hunger": "fed",
@@ -133,6 +132,7 @@
 
         function updateUserActions() {
             try {
+                console.log("TIME: " + lastUserActionQueryTime)
                 fetch(`${endpointHostname}getNewUserActions/${lastUserActionQueryTime}`)
                     .then((response) => response.json())
                     .then((actions) => {
@@ -140,6 +140,7 @@
                     })
                 fetch(`${endpointHostname}onlineStatus/`)
                     .then((response) => {
+                        console.log("ONLINE STATUS: " + response)
                         if (response.status == 200){
                             return response.json()
                         }
@@ -156,6 +157,7 @@
 
             // Get all entries less than 10 seconds old
             lastUserActionQueryTime = getDateTimeISOString(notificationLingerTimeMs)
+            console.log("LAST USER ACTION")
         }   
         const interval = setInterval(updateUserActions, 2000);
         updateUserActions()
