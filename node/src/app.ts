@@ -47,8 +47,6 @@ async function setup (app: Realm.App<Realm.DefaultFunctionsFactory, any>): Promi
   return await Realm.open(config)
 }
 
-// TODO: Filter to just relevant non-boolean stats
-// A 50% chance to atrophy or something would be cool here
 function atrophyPetStats (): void {
   if (realm != null) {
     realm.write(() => {
@@ -58,7 +56,10 @@ function atrophyPetStats (): void {
           stat.statValue = 0
           console.warn(`Stat "${stat.statName}" is less than 0!`)
         } else if (stat.statValue > 0) {
-          stat.statValue--
+          // 50% Chance of ticking each stat
+          if (Math.floor(Math.random() * 2) < 1){
+            stat.statValue--
+          }
         }
       }
     })
@@ -227,7 +228,7 @@ exp.listen(port, hostname, () => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   if (environment != 'cloud'){
     setInterval(getOfflineStatus, 5000)
-    setInterval(atrophyPetStats, 60000)
+    setInterval(atrophyPetStats, 30000) // Every 30 seconds 50% chance of reducing each stat
   }
 
   console.log(`Server running at http://${hostname}:${port}/`)
