@@ -16,3 +16,5 @@ export const petStats= writable({
         "online": 100,
     },
 });
+
+export const activeLocations = writable({});

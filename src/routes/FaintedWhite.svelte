@@ -1,5 +1,9 @@
+<script>
+    export let fishId;
+    export let finId;
+</script>
 <div>
-    <svg id="fish" width="634" height="314" viewBox="0 0 634 314" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg id={fishId} width="634" height="314" viewBox="0 0 634 314" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask id="path-1-inside-1_9_338" fill="white">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M535.026 135.298C487.641 95.2488 389.24 26.0005 276.102 26.8105C146.891 27.7356 38.2079 119.754 1.97251 154.252L19.3204 165.825C19.9087 166.217 19.9149 167.079 19.3322 167.48L2.27773 179.214C39.1237 212.739 149.008 304.228 278.081 303.303C391.47 302.492 489.05 231.531 535.735 190.851L608.589 244.436C608.589 244.436 631.348 203.506 632.137 162.265C632.927 121.024 607.415 80.44 607.415 80.44L535.026 135.298Z"/>
         </mask>
