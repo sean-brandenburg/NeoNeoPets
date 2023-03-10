@@ -14,7 +14,16 @@
         "cleanliness": "cleaned",
     }
 
-    const notificationLingerTimeMs = 10000
+    const notificationLingerTimeMs = 30000
+
+    function getDateTimeISOString(additionalOffset) {
+        // const offset = new Date().getTimezoneOffset();
+        // const myDate = Date.now() - (offset * 60 * 1000) - additionalOffset;
+        // const dateAsISO = new Date(myDate).toISOString();
+        const dateAsISO = new Date(Date.now() - additionalOffset).toISOString();
+        return dateAsISO.replace(/.\d+Z$/g, "")
+    }
+
 
     var fishWidth = 631;
     var fishHeight = 309;
@@ -43,7 +52,7 @@
 
     $: userActions = []
     $: MTSSonline = true
-    let lastUserActionQueryTime = new Date(Date.now()).toISOString().replace(/.\d+Z$/g, "");
+    let lastUserActionQueryTime = getDateTimeISOString(0)
 
     function moveSection(idStr, xOffset, yOffset, invert) {
         var domElemnt = document.getElementById(idStr);
@@ -150,7 +159,7 @@
             }
 
             // Get all entries less than 10 seconds old
-            lastUserActionQueryTime = new Date(Date.now() - notificationLingerTimeMs).toISOString().replace(/.\d+Z$/g, "");
+            lastUserActionQueryTime = getDateTimeISOString(notificationLingerTimeMs)
         }   
         const interval = setInterval(updateUserActions, 2000);
         updateUserActions()

@@ -72,7 +72,8 @@ async function getOfflineStatus (): Promise<void> {
 
     if (realm != null) {
       realm.write(() => {
-        const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online"`)
+        // Only do this update if this node server is configured to talk to an MTSS
+        const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online" AND location == "${environment}"`)
         for (const stat of statsObjects) {
           stat.statValue = onlineStatus ? 100 : 0
         }
@@ -164,22 +165,23 @@ exp.get('/onlineStatus', (req: Request, res: Response) => {
     return
   }
 
-  res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
 
   const query = `statName == "online" AND location == "${environment}"`
   console.log(`Getting onlineStatus with query: ${query}`)
 
   var onlineStatus = getObjectsJSON<PetStat>(realm, PetStatsSchema.name, query)
-  if (!onlineStatus){
+
+  if (!onlineStatus || onlineStatus.length == 0){
     res.statusCode = 400
-    res.end()
-    return
   }
 
-  res.send({
-    "online": onlineStatus[0].statValue != 0
-  })
+  if('statValue' in onlineStatus){
+    res.statusCode = 200
+    res.send({
+      "online": onlineStatus[0].statValue != 0
+    })
+  }
 
   res.end()
 })
@@ -187,7 +189,7 @@ exp.get('/onlineStatus', (req: Request, res: Response) => {
 exp.listen(port, hostname, () => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   if (environment != 'cloud'){
-    setInterval(getOfflineStatus, 10000)
+    setInterval(getOfflineStatus, 5000)
     setInterval(atrophyPetStats, 10000)
   }
 
