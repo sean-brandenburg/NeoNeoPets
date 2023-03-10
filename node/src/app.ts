@@ -174,6 +174,7 @@ exp.get('/adminReset/:location', (req: Request, res: Response) => {
   if (realm != null) {
     realm.write(() => {
       const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(query)
+      console.log(`Reset ${statsObjects.length} stat objects for ${req.params.location}`)
       for (const stat of statsObjects) {
           stat.statValue = 100
       }
@@ -198,7 +199,6 @@ exp.get('/onlineStatus', (req: Request, res: Response) => {
   console.log(`Getting onlineStatus with query: ${query}`)
 
   var onlineStatus = getObjectsJSON<PetStat>(realm, PetStatsSchema.name, query)
-  console.log("ONLINE STATUS: " + onlineStatus[0].statValue)
 
   // Default to true but return error status code
   if (!onlineStatus || onlineStatus.length == 0){
