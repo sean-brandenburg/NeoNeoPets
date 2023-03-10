@@ -136,7 +136,7 @@
 
         function updateUserActions() {
             try {
-                fetch(`http://localhost:3000/getNewUserActions/${lastUserActionQueryTime}`)
+                fetch(`getNewUserActions/${lastUserActionQueryTime}`)
                     .then((response) => response.json())
                     .then((actions) => {
                         userActions = [...userActions, ...actions];
