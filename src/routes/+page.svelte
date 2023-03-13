@@ -166,7 +166,7 @@
         <FishView location="atx" renderDivider={'nyc' in $activeLocations}></FishView>
     {/if}
 
-    {#if Object.keys($activeLocations).length == 2}
+    {#if Object.keys($activeLocations).length == 1}
         <div class="absolute bottom-32 left-5 w-full text-4xl">
             {#each userActions as { _id, actionTaken, petName }}
                 <div class="chat chat-start opacity-50">
