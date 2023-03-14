@@ -228,7 +228,9 @@ exp.listen(port, hostname, () => {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   if (environment != 'cloud'){
     setInterval(getOfflineStatus, 5000)
-    setInterval(atrophyPetStats, 30000) // Every 30 seconds 50% chance of reducing each stat
+
+    // Roughly 3 days to tick each stat from 100 to 0 (50% chance to tick stat each interval)
+    setInterval(atrophyPetStats, 1296000) 
   }
 
   console.log(`Server running at http://${hostname}:${port}/`)
