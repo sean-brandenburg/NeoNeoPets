@@ -166,23 +166,14 @@
         <FishView location="atx" renderDivider={'nyc' in $activeLocations}></FishView>
     {/if}
 
-    {#if Object.keys($activeLocations).length == 1}
-        <div class="absolute bottom-32 left-5 w-full text-4xl">
-            {#each userActions as { _id, actionTaken, petName }}
-                <div class="chat chat-start opacity-50">
-                    <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName}!</div>
-                </div>
-            {/each}
+    <!-- Move notifications above the bottom stat bar if we have 2 fish -->
+    <div class="absolute bottom-{Object.keys($activeLocations).length == 2 ? "32": "5"} left-5 w-full text-4xl">
+    {#each userActions as { _id, actionTaken, petName, location }}
+        <div class="chat chat-start opacity-50">
+            <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName} in {location.toUpperCase()}!</div>
         </div>
-    {:else}
-         <div class="absolute bottom-5 left-5 w-full text-4xl">
-            {#each userActions as { _id, actionTaken, petName, location }}
-                <div class="chat chat-start opacity-50">
-                    <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName} in {location.toUpperCase()}!</div>
-                </div>
-            {/each}
-        </div>           
-    {/if}
+    {/each}
+    </div>           
     
     {#if !MTSSonline}
     <div class="absolute bottom-5 right-5 w-auto">

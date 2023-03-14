@@ -13,6 +13,8 @@
                         stats.forEach(stat => {
                             $petStats[stat.location][stat.statName] = stat ? stat.statValue : -1
                             $activeLocations[stat.location] = true
+                            // Trigger reactivity
+                            $activeLocations = $activeLocations
                         });
                     })
             } catch (error) {
