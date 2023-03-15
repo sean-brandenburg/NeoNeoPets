@@ -1,15 +1,15 @@
 <script>
     import { onMount } from 'svelte';
-    import NormalWhite from './NormalWhite.svelte';
-    import HungryWhite from './HungryWhite.svelte';
-    import HappyWhite from './HappyWhite.svelte';
-    import FaintedWhite from './FaintedWhite.svelte';
-    import BoredWhite from './BoredWhite.svelte';
-    import NormalDark from './NormalDark.svelte';
-    import HungryDark from './HungryDark.svelte';
-    import HappyDark from './HappyDark.svelte';
-    import FaintedDark from './FaintedDark.svelte';
-    import BoredDark from './BoredDark.svelte';
+    import NormalWhite from './FishStates/NormalWhite.svelte';
+    import HungryWhite from './FishStates/HungryWhite.svelte';
+    import HappyWhite from './FishStates/HappyWhite.svelte';
+    import FaintedWhite from './FishStates/FaintedWhite.svelte';
+    import BoredWhite from './FishStates/BoredWhite.svelte';
+    import NormalDark from './FishStates/NormalDark.svelte';
+    import HungryDark from './FishStates/HungryDark.svelte';
+    import HappyDark from './FishStates/HappyDark.svelte';
+    import FaintedDark from './FishStates/FaintedDark.svelte';
+    import BoredDark from './FishStates/BoredDark.svelte';
     import { petStats, endpointHostname } from '$lib/statStores.js';
     
     export let location;

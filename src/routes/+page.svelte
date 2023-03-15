@@ -167,13 +167,14 @@
     {/if}
 
     <!-- Move notifications above the bottom stat bar if we have 2 fish -->
+    <!-- DO NOT DELETE THIS COMMENT (triggers tailwind to import these classes): bottom-32 bottom-5 -->
     <div class="absolute bottom-{Object.keys($activeLocations).length == 2 ? "32": "5"} left-5 w-full text-4xl">
     {#each userActions as { _id, actionTaken, petName, location }}
         <div class="chat chat-start opacity-50">
             <div class="chat-bubble ">{_id} has {actionMap[actionTaken]} {petName} in {location.toUpperCase()}!</div>
         </div>
     {/each}
-    </div>           
+    </div>
     
     {#if !MTSSonline}
     <div class="absolute bottom-5 right-5 w-auto">
