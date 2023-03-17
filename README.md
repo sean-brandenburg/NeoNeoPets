@@ -3,10 +3,14 @@ neoneopets
 
 ## Frontend Instructions
 
+### Running Locally 
 1. `npm i`
-
 2. `npm run dev`
 
+### Building For Node Server Hosting
+1. `npm i`
+2. `npm run build`
+    - The node server will look for the built webpage in the /build folder generated using the svelte static adapter
 
 ## Node Server
 
