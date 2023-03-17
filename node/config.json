@@ -1,0 +1,6 @@
+{
+    "AppId": "<MongoAppID>",
+    "nyc": "<Tiered_Sync_Server_IP>",
+    "atx": "<Tiered_Sync_Server_IP>",
+    "cloud": "https://realm.mongodb.com"
+}
