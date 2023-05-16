@@ -70,16 +70,20 @@ async function getOfflineStatus (): Promise<void> {
   try {
     const response = await fetch(`${baseURL}/api/client/v2.0/tiered-sync/status`)
     var res = await response.json()
-    const onlineStatus = (res).cloud_connected
+    const onlineStatValue = (res).cloud_connected
 
     if (realm != null) {
-      realm.write(() => {
-        // Only do this update if this node server is configured to talk to an MTSS
-        const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online" AND location == "${environment}"`)
-        for (const stat of statsObjects) {
-          stat.statValue = onlineStatus ? 100 : 0
-        }
-      })
+      var onlineStatus = onlineStatus ? 100 : 0
+
+      const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online" AND location == "${environment}"`)
+      for (const stat of statsObjects) {
+	if (stat.statValue != onlineStatValue) {
+          realm.write(() => {
+	    stat.statValue = onlineStatValue
+          })
+	}
+      }
+
     }
   } catch (error) {
     console.warn(`could not get online status: ${error}`)
