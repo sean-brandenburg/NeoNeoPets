@@ -70,18 +70,17 @@ async function getOfflineStatus (): Promise<void> {
   try {
     const response = await fetch(`${baseURL}/api/client/v2.0/tiered-sync/status`)
     var res = await response.json()
-    const onlineStatValue = (res).cloud_connected
+    const onlineStatus = (res).cloud_connected
 
     if (realm != null) {
-      var onlineStatus = onlineStatus ? 100 : 0
-
+      var onlineStatValue= onlineStatus ? 100 : 0
       const statsObjects = realm.objects<PetStat>(PetStatsSchema.name).filtered(`statName == "online" AND location == "${environment}"`)
       for (const stat of statsObjects) {
-	if (stat.statValue != onlineStatValue) {
+        if (stat.statValue != onlineStatValue) {
           realm.write(() => {
-	    stat.statValue = onlineStatValue
+            stat.statValue = onlineStatValue
           })
-	}
+        }
       }
 
     }
